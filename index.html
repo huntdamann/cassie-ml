@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./src/style.css" />
+    <title>cassiecreated-dev</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.min.js"></script>
+    <script src="https://cdn.rawgit.com/liabru/matter-js/0895d81f/build/matter.min.js"></script>
+  </head>
+
+  <body>
+    <header>
+      <div class="header-container">
+        <span class="header-text">Header</span>
+      </div>
+    </header>
+    <main>
+      <section class="hero">
+        <div class="hero-container">
+          <div class="logo-name-one">
+            <p class="char-handle letter-c">C</p>
+            <p class="char-handle letter-a">a</p>
+            <p class="char-handle letter-s">s</p>
+            <p class="char-handle letter-s">s</p>
+            <p class="char-handle letter-i">i</p>
+            <p class="char-handle letter-e">e</p>
+          </div>
+        </div>
+
+        <div class="canvas"></div>
+      </section>
+    </main>
+    <footer>
+      <div class="footer-container">
+        <div class="img-containter">
+          <!-- <img
+            src="./public/images/logo/c-c-single.png"
+            alt="Cassie Created Company Single Logo"
+            fill
+          /> -->
+        </div>
+      </div>
+    </footer>
+    <script>
+      Array.prototype.sample = function () {
+        return this[Math.floor(Math.random() * this.length)];
+      };
+      var Engine = Matter.Engine;
+      var Render = Matter.Render;
+      var World = Matter.World;
+      var Bodies = Matter.Bodies;
+      var Composite = Matter.Composite;
+      var Composites = Matter.Composites;
+
+      var engine;
+      var world;
+      var bodies;
+      var box;
+      var C;
+      var A;
+      var S;
+      var I;
+      var E;
+      var letterC;
+      var letterA;
+      var letterS;
+      var letterI;
+      var letterE;
+
+      var letterCWidth;
+      var letterCHeight;
+
+      let letters = [];
+
+      function makeLetter(x, y) {
+        var params = {
+          restitution: 0.7,
+          friction: 0.2,
+        };
+        return Bodies.rectangle(x, y, 60, 30, params);
+      }
+
+      function preload() {
+        // Load the custom font
+        customFont = loadFont("fonts/Dejanire-Text-Extra-Bold.otf");
+      }
+
+      function setup() {
+        // The createCanvas function is available here
+        let hero = document.querySelector(".canvas");
+        // create an engine
+        engine = Engine.create();
+        world = engine.world;
+
+        var canvas = createCanvas(hero.clientWidth, hero.clientHeight);
+        console.log(canvas);
+
+        canvas.parent(hero);
+        // Set walls
+        var params = {
+          isStatic: true,
+        };
+
+        var ground = Bodies.rectangle(width / 2, height, width, 1, params);
+        var wall1 = Bodies.rectangle(0, height / 2, 1, height, params);
+        var wall2 = Bodies.rectangle(width, height / 2, 1, height, params);
+
+        World.add(world, ground);
+        World.add(world, wall1);
+        World.add(world, wall2);
+        C = document.querySelector(".letter-c");
+        A = document.querySelector(".letter-a");
+        S = document.querySelector(".letter-s");
+        I = document.querySelector(".letter-i");
+        E = document.querySelector(".letter-e");
+
+        letterC = Bodies.rectangle(10, 10, C.clientWidth, C.clientHeight, {
+          restitution: 0.8, // Add bounciness
+          friction: 0.5,
+        });
+        letterCWidth = C.clientWidth;
+        letterCHeight = C.clientHeight;
+
+        letters.push(letterC);
+        // Add the body to the Matter.js world
+        World.add(engine.world, [letterC]);
+        // run the engine
+        Engine.run(engine);
+      }
+
+      function draw() {
+        let C = document.querySelector(".letter-c");
+        if (!C) {
+          console.error(
+            "Element with class 'letter-c' not found in draw function."
+          );
+          return; // Exit the draw function if the element is null
+        }
+        background(111); // Set a background color
+        strokeWeight(0);
+        // set cursor
+        fill("#0EFF00");
+        circle(mouseX, mouseY, 10);
+        for (let letter of letters) {
+          textFont(customFont);
+          textFont("serif");
+          textStyle(ITALIC);
+
+          var txt1 = "C";
+          var wordWith = textWidth(txt1);
+          var fontSize = 36;
+          textSize(fontSize);
+
+          push();
+          translate(letter.position.x, letter.position.y);
+          rotate(letter.angle);
+          rectMode(CENTER);
+
+          // Draw the rectangle
+          fill(255, 0, 0, 1);
+          rect(0, 0, wordWith, fontSize);
+
+          fill(255);
+          textAlign(CENTER);
+          text(txt1, 0, fontSize / 2);
+          pop();
+        }
+        // push();
+        // translate(box.position.x, box.position.y);
+        // rotate(box.angle);
+        // rectMode(CENTER);
+
+        // fill(255, 255, 255);
+        // rect(0, 0, C.clientWidth, C.clientHeight);
+        // pop();
+        // for (var i = 0; i < bodies.length; i++) {
+        //   var circleL = bodies[i];
+        //   var pos = circleL.position;
+        //   var r = circleL.circleRadius;
+        //   var angle = circleL.angle;
+
+        //   var fontSize = 38;
+
+        //   textSize(fontSize);
+
+        //   var txt1 = "C";
+        //   var wordWith = textWidth(txt1);
+
+        //   push();
+        //   translate(pos.x, pos.y);
+        //   rotate(angle);
+
+        //   // set rectangle in background, change fill to solid color to see it
+        //   rectMode(CENTER);
+        //   fill(255, 0, 0, 0);
+        //   rect(0, 0, wordWith, fontSize);
+
+        //   // set text
+        //   fill(255);
+        //   textAlign(CENTER);
+        //   text(txt1, 0, fontSize / 2);
+
+        //   pop();
+        // }
+      }
+    </script>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
