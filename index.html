@@ -77,8 +77,17 @@
 
       let letters = [
         {
-          char: "S",
-          position: { x: 10, y: 10 },
+          char: "E",
+          position: { x: 100, y: 10 },
+          dimensions: { width: 0, height: 0 },
+          params: {
+            restitution: 0.7,
+            friction: 0.2,
+          },
+        },
+        {
+          char: "I",
+          position: { x: 100, y: 10 },
           dimensions: { width: 0, height: 0 },
           params: {
             restitution: 0.7,
@@ -87,7 +96,16 @@
         },
         {
           char: "S",
-          position: { x: 10, y: 10 },
+          position: { x: 100, y: 10 },
+          dimensions: { width: 0, height: 0 },
+          params: {
+            restitution: 0.7,
+            friction: 0.2,
+          },
+        },
+        {
+          char: "S",
+          position: { x: 100, y: 10 },
           dimensions: { width: 0, height: 0 },
           params: {
             restitution: 0.7,
@@ -96,7 +114,7 @@
         },
         {
           char: "A",
-          position: { x: 10, y: 10 },
+          position: { x: 100, y: 10 },
           dimensions: { width: 0, height: 0 },
           params: {
             restitution: 0.7,
@@ -105,16 +123,7 @@
         },
         {
           char: "C",
-          position: { x: 10, y: 10 },
-          dimensions: { width: 0, height: 0 },
-          params: {
-            restitution: 0.7,
-            friction: 0.2,
-          },
-        },
-        {
-          char: "E",
-          position: { x: 10, y: 10 },
+          position: { x: 100, y: 10 },
           dimensions: { width: 0, height: 0 },
           params: {
             restitution: 0.7,
@@ -174,16 +183,18 @@
         E = document.querySelector(".letter-e");
 
         // Set Dimensions and Position for Letters
-        letters[0].dimensions.width = S.clientWidth;
-        letters[0].dimensions.height = S.clientHeight;
-        letters[1].dimensions.width = S.clientWidth;
-        letters[1].dimensions.height = S.clientHeight;
-        letters[2].dimensions.width = A.clientWidth;
-        letters[2].dimensions.height = A.clientHeight;
-        letters[3].dimensions.width = C.clientWidth;
-        letters[3].dimensions.height = C.clientHeight;
-        letters[4].dimensions.width = E.clientWidth;
-        letters[4].dimensions.height = E.clientHeight;
+        letters[0].dimensions.width = E.clientWidth;
+        letters[0].dimensions.height = E.clientHeight;
+        letters[1].dimensions.width = I.clientWidth;
+        letters[1].dimensions.height = I.clientHeight;
+        letters[2].dimensions.width = S.clientWidth;
+        letters[2].dimensions.height = S.clientHeight;
+        letters[3].dimensions.width = S.clientWidth;
+        letters[3].dimensions.height = S.clientHeight;
+        letters[4].dimensions.width = A.clientWidth;
+        letters[4].dimensions.height = A.clientHeight;
+        letters[5].dimensions.width = C.clientWidth;
+        letters[5].dimensions.height = C.clientHeight;
 
         const CRect = C.getBoundingClientRect();
         const Cx = CRect.x;
@@ -196,8 +207,8 @@
           letterBody = Bodies.rectangle(
             letter.position.x,
             letter.position.y,
-            letter.dimensions.width,
-            letter.dimensions.height,
+            letter.dimensions.width / 1.3,
+            letter.dimensions.height / 1.3,
             letter.params
           );
           bodiesArray.push(letterBody);
