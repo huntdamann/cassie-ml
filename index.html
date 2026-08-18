@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/cassie-ml/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>cassiecreated-dev</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.min.js"></script>
+    <script src="https://cdn.rawgit.com/liabru/matter-js/0895d81f/build/matter.min.js"></script>
+    <script type="module" crossorigin src="/cassie-ml/assets/index-Z-WnSX9U.js"></script>
+    <link rel="stylesheet" crossorigin href="/cassie-ml/assets/index-BSgVyp0q.css">
+  </head>
+
+  <body>
+    <header>
+      <div class="header-container">
+        <span class="header-text">Header</span>
+      </div>
+    </header>
+    <main>
+      <section class="hero">
+        <div class="hero-container">
+          <div class="logo-name-one">
+            <p class="char-handle letter-c">C</p>
+            <p class="char-handle letter-a">a</p>
+            <p class="char-handle letter-s">s</p>
+            <p class="char-handle letter-s">s</p>
+            <p class="char-handle letter-i">i</p>
+            <p class="char-handle letter-e">e</p>
+          </div>
+        </div>
+
+        <div class="canvas"></div>
+      </section>
+    </main>
+    <footer>
+      <div class="footer-container">
+        <div class="img-containter">
+          <!-- <img
+            src="./public/images/logo/c-c-single.png"
+            alt="Cassie Created Company Single Logo"
+            fill
+          /> -->
+        </div>
+      </div>
+    </footer>
+    <script>
+      Array.prototype.sample = function () {
+        return this[Math.floor(Math.random() * this.length)];
+      };
+      var Engine = Matter.Engine;
+      var Render = Matter.Render;
+      var World = Matter.World;
+      var Bodies = Matter.Bodies;
+      var Composite = Matter.Composite;
+      var Composites = Matter.Composites;
+
+      var engine;
+      var world;
+      var bodies;
+      var box;
+      var C;
+      var A;
+      var S;
+      var I;
+      var E;
+      var letterC;
+      var letterA;
+      var letterS;
+      var letterI;
+      var letterE;
+
+      var letterCWidth;
+      var letterCHeight;
+      var letterAWidth;
+      var letterAHeight;
+
+      let letters = [
+        {
+          char: "S",
+          position: { x: 10, y: 10 },
+          dimensions: { width: 0, height: 0 },
+          params: {
+            restitution: 0.7,
+            friction: 0.2,
+          },
+        },
+        {
+          char: "S",
+          position: { x: 10, y: 10 },
+          dimensions: { width: 0, height: 0 },
+          params: {
+            restitution: 0.7,
+            friction: 0.2,
+          },
+        },
+        {
+          char: "A",
+          position: { x: 10, y: 10 },
+          dimensions: { width: 0, height: 0 },
+          params: {
+            restitution: 0.7,
+            friction: 0.2,
+          },
+        },
+        {
+          char: "C",
+          position: { x: 10, y: 10 },
+          dimensions: { width: 0, height: 0 },
+          params: {
+            restitution: 0.7,
+            friction: 0.2,
+          },
+        },
+        {
+          char: "E",
+          position: { x: 10, y: 10 },
+          dimensions: { width: 0, height: 0 },
+          params: {
+            restitution: 0.7,
+            friction: 0.2,
+          },
+        },
+      ];
+      let bodiesArray = [];
+      let i = 0;
+
+      function makeLetter(x, y) {
+        var params = {
+          restitution: 0.7,
+          friction: 0.2,
+        };
+        return Bodies.rectangle(x, y, 60, 30, params);
+      }
+
+      function preload() {
+        // Load the custom font
+        customFont = loadFont("fonts/Dejanire-Text-Extra-Bold.otf");
+      }
+
+      function setup() {
+        // The createCanvas function is available here
+        let hero = document.querySelector(".canvas");
+        // create an engine
+        engine = Engine.create();
+        world = engine.world;
+
+        var canvas = createCanvas(hero.clientWidth, hero.clientHeight);
+        console.log(canvas);
+
+        canvas.parent(hero);
+        // Set walls
+        var params = {
+          isStatic: true,
+        };
+
+        var ground = Bodies.rectangle(width / 2, height, width, 1, params);
+        var wall1 = Bodies.rectangle(0, height / 2, 1, height, params);
+        var wall2 = Bodies.rectangle(width, height / 2, 1, height, params);
+
+        World.add(world, ground);
+        World.add(world, wall1);
+        World.add(world, wall2);
+
+        //World has been made, now you have a letters array with each character and
+        //the x and y of where you would like them to be placed
+        //Make a body based on this array info and add Body to World
+
+        C = document.querySelector(".letter-c");
+
+        A = document.querySelector(".letter-a");
+        S = document.querySelector(".letter-s");
+        I = document.querySelector(".letter-i");
+        E = document.querySelector(".letter-e");
+
+        // Set Dimensions and Position for Letters
+        letters[0].dimensions.width = S.clientWidth;
+        letters[0].dimensions.height = S.clientHeight;
+        letters[1].dimensions.width = S.clientWidth;
+        letters[1].dimensions.height = S.clientHeight;
+        letters[2].dimensions.width = A.clientWidth;
+        letters[2].dimensions.height = A.clientHeight;
+        letters[3].dimensions.width = C.clientWidth;
+        letters[3].dimensions.height = C.clientHeight;
+        letters[4].dimensions.width = E.clientWidth;
+        letters[4].dimensions.height = E.clientHeight;
+
+        const CRect = C.getBoundingClientRect();
+        const Cx = CRect.x;
+
+        console.log("X position of C:", Cx);
+
+        //Define Each Body
+        for (let letter of letters) {
+          let letterBody = null;
+          letterBody = Bodies.rectangle(
+            letter.position.x,
+            letter.position.y,
+            letter.dimensions.width,
+            letter.dimensions.height,
+            letter.params
+          );
+          bodiesArray.push(letterBody);
+        }
+
+        // Add the body to the Matter.js world
+        World.add(engine.world, bodiesArray);
+        // run the engine
+        Engine.run(engine);
+      }
+
+      function draw() {
+        i = 0; // Reset `i` at the start of each frame
+
+        background(111); // Set a background color
+        strokeWeight(0);
+        // set cursor
+        fill("#0EFF00");
+        circle(mouseX, mouseY, 10);
+        for (let letter of bodiesArray) {
+          textFont(customFont);
+          textFont("serif");
+          textStyle(ITALIC);
+
+          var txt = letters[i].char;
+          // console.log(txt);
+          var wordWith = textWidth(txt);
+
+          var fontSize = 36;
+          textSize(fontSize);
+
+          push();
+          translate(letter.position.x, letter.position.y);
+          rotate(letter.angle);
+          rectMode(CENTER);
+
+          // Draw the rectangle
+          fill(255, 0, 0, 1);
+          rect(0, 0, wordWith, fontSize);
+
+          fill(255);
+          textAlign(CENTER);
+          text(txt, 0, fontSize / 2);
+          pop();
+          i++;
+          // if (i >= letters.length) {
+          //   i = 0; // Reset to loop through the array again
+          // }
+        }
+      }
+    </script>
+
+  </body>
+</html>
