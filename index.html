@@ -71,8 +71,58 @@
 
       var letterCWidth;
       var letterCHeight;
+      var letterAWidth;
+      var letterAHeight;
 
-      let letters = [];
+      let letters = [
+        {
+          char: "S",
+          position: { x: 10, y: 10 },
+          dimensions: { width: 0, height: 0 },
+          params: {
+            restitution: 0.7,
+            friction: 0.2,
+          },
+        },
+        {
+          char: "S",
+          position: { x: 10, y: 10 },
+          dimensions: { width: 0, height: 0 },
+          params: {
+            restitution: 0.7,
+            friction: 0.2,
+          },
+        },
+        {
+          char: "A",
+          position: { x: 10, y: 10 },
+          dimensions: { width: 0, height: 0 },
+          params: {
+            restitution: 0.7,
+            friction: 0.2,
+          },
+        },
+        {
+          char: "C",
+          position: { x: 10, y: 10 },
+          dimensions: { width: 0, height: 0 },
+          params: {
+            restitution: 0.7,
+            friction: 0.2,
+          },
+        },
+        {
+          char: "E",
+          position: { x: 10, y: 10 },
+          dimensions: { width: 0, height: 0 },
+          params: {
+            restitution: 0.7,
+            friction: 0.2,
+          },
+        },
+      ];
+      let bodiesArray = [];
+      let i = 0;
 
       function makeLetter(x, y) {
         var params = {
@@ -110,46 +160,71 @@
         World.add(world, ground);
         World.add(world, wall1);
         World.add(world, wall2);
+
+        //World has been made, now you have a letters array with each character and
+        //the x and y of where you would like them to be placed
+        //Make a body based on this array info and add Body to World
+
         C = document.querySelector(".letter-c");
+
         A = document.querySelector(".letter-a");
         S = document.querySelector(".letter-s");
         I = document.querySelector(".letter-i");
         E = document.querySelector(".letter-e");
 
-        letterC = Bodies.rectangle(10, 10, C.clientWidth, C.clientHeight, {
-          restitution: 0.8, // Add bounciness
-          friction: 0.5,
-        });
-        letterCWidth = C.clientWidth;
-        letterCHeight = C.clientHeight;
+        // Set Dimensions and Position for Letters
+        letters[0].dimensions.width = S.clientWidth;
+        letters[0].dimensions.height = S.clientHeight;
+        letters[1].dimensions.width = S.clientWidth;
+        letters[1].dimensions.height = S.clientHeight;
+        letters[2].dimensions.width = A.clientWidth;
+        letters[2].dimensions.height = A.clientHeight;
+        letters[3].dimensions.width = C.clientWidth;
+        letters[3].dimensions.height = C.clientHeight;
+        letters[4].dimensions.width = E.clientWidth;
+        letters[4].dimensions.height = E.clientHeight;
 
-        letters.push(letterC);
+        const CRect = C.getBoundingClientRect();
+        const Cx = CRect.x;
+
+        console.log("X position of C:", Cx);
+
+        //Define Each Body
+        for (let letter of letters) {
+          let letterBody = null;
+          letterBody = Bodies.rectangle(
+            letter.position.x,
+            letter.position.y,
+            letter.dimensions.width,
+            letter.dimensions.height,
+            letter.params
+          );
+          bodiesArray.push(letterBody);
+        }
+
         // Add the body to the Matter.js world
-        World.add(engine.world, [letterC]);
+        World.add(engine.world, bodiesArray);
         // run the engine
         Engine.run(engine);
       }
 
       function draw() {
-        let C = document.querySelector(".letter-c");
-        if (!C) {
-          console.error(
-            "Element with class 'letter-c' not found in draw function."
-          );
-          return; // Exit the draw function if the element is null
-        }
+        i = 0; // Reset `i` at the start of each frame
+
         background(111); // Set a background color
         strokeWeight(0);
         // set cursor
         fill("#0EFF00");
         circle(mouseX, mouseY, 10);
-        for (let letter of letters) {
+        for (let letter of bodiesArray) {
           textFont(customFont);
           textFont("serif");
           textStyle(ITALIC);
 
-          var txt1 = "C";
-          var wordWith = textWidth(txt1);
+          var txt = letters[i].char;
+          // console.log(txt);
+          var wordWith = textWidth(txt);
+
           var fontSize = 36;
           textSize(fontSize);
 
@@ -164,46 +239,13 @@
 
           fill(255);
           textAlign(CENTER);
-          text(txt1, 0, fontSize / 2);
+          text(txt, 0, fontSize / 2);
           pop();
+          i++;
+          // if (i >= letters.length) {
+          //   i = 0; // Reset to loop through the array again
+          // }
         }
-        // push();
-        // translate(box.position.x, box.position.y);
-        // rotate(box.angle);
-        // rectMode(CENTER);
-
-        // fill(255, 255, 255);
-        // rect(0, 0, C.clientWidth, C.clientHeight);
-        // pop();
-        // for (var i = 0; i < bodies.length; i++) {
-        //   var circleL = bodies[i];
-        //   var pos = circleL.position;
-        //   var r = circleL.circleRadius;
-        //   var angle = circleL.angle;
-
-        //   var fontSize = 38;
-
-        //   textSize(fontSize);
-
-        //   var txt1 = "C";
-        //   var wordWith = textWidth(txt1);
-
-        //   push();
-        //   translate(pos.x, pos.y);
-        //   rotate(angle);
-
-        //   // set rectangle in background, change fill to solid color to see it
-        //   rectMode(CENTER);
-        //   fill(255, 0, 0, 0);
-        //   rect(0, 0, wordWith, fontSize);
-
-        //   // set text
-        //   fill(255);
-        //   textAlign(CENTER);
-        //   text(txt1, 0, fontSize / 2);
-
-        //   pop();
-        // }
       }
     </script>
 
